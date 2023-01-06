@@ -1,6 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 def show_distribution (var: pd.Series):
     '''
@@ -33,3 +34,30 @@ def show_distribution (var: pd.Series):
 
     #set the title
     fig.suptitle('Data Distribution for {} Minimum = {:.2f} Average = {:.2f} Median = {:.2f} Mode = {:.2f} Maximum = {:.2f}'.format(var.name,min_val, ave_val, med_val, mod_val, max_val))
+
+def show_box(df: pd.DataFrame, feature: str, label: str):
+    '''
+    This function accepts a Pandas dataframe and column names for a categorical feature and label and returns a box plot to show their relationship
+    '''
+    df.boxplot(column=label, by=feature, figsize=(8,8))
+    plt.xticks(rotation=90)
+
+def show_correlation(label_set: pd.Series, feature_set: pd.Series):
+    '''
+    This function accepts 2 Pandas series and shows their correlation as a scatter plot and a line demonstrating linear regression
+    '''
+    fig = plt.figure(figsize=(9,6))
+    ax = fig.gca()
+    correlation = feature_set.corr(label_set)
+
+    # regression slope and intercept
+    slope, intercept, r, p, std_err = stats.linregress(feature_set, label_set)
+    #calculate f(x)
+    df_reg = pd.Series(dtype='object')
+    df_reg ['fx']= (slope * feature_set) + intercept
+    
+    plt.scatter(x=feature_set, y=label_set)
+    plt.xlabel(feature_set.name)
+    plt.ylabel(label_set.name)
+    plt.title(label_set.name + ' vs ' + feature_set.name + ' - correlation:' + str(correlation) + '\nslope: {:.4f}\ny-intercept: {:.4f}'.format(slope,intercept))
+    plt.plot(feature_set, df_reg['fx'], color = 'red')
