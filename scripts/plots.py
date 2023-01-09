@@ -42,22 +42,22 @@ def show_box(df: pd.DataFrame, feature: str, label: str):
     df.boxplot(column=label, by=feature, figsize=(8,8))
     plt.xticks(rotation=90)
 
-def show_correlation(label_set: pd.Series, feature_set: pd.Series):
+def show_correlation(label: pd.Series, feature: pd.Series):
     '''
     This function accepts 2 Pandas series and shows their correlation as a scatter plot and a line demonstrating linear regression
     '''
     fig = plt.figure(figsize=(9,6))
     ax = fig.gca()
-    correlation = feature_set.corr(label_set)
+    correlation = feature.corr(label)
 
     # regression slope and intercept
-    slope, intercept, r, p, std_err = stats.linregress(feature_set, label_set)
+    slope, intercept, r, p, std_err = stats.linregress(feature, label)
     #calculate f(x)
     df_reg = pd.Series(dtype='object')
-    df_reg ['fx']= (slope * feature_set) + intercept
+    df_reg ['fx']= (slope * feature) + intercept
     
-    plt.scatter(x=feature_set, y=label_set)
-    plt.xlabel(feature_set.name)
-    plt.ylabel(label_set.name)
-    plt.title(label_set.name + ' vs ' + feature_set.name + ' - correlation:' + str(correlation) + '\nslope: {:.4f}\ny-intercept: {:.4f}'.format(slope,intercept))
-    plt.plot(feature_set, df_reg['fx'], color = 'red')
+    plt.scatter(x=feature, y=label)
+    plt.xlabel(feature.name)
+    plt.ylabel(label.name)
+    plt.title(label.name + ' vs ' + feature.name + ' - correlation:' + str(correlation) + '\nslope: {:.4f}\ny-intercept: {:.4f}'.format(slope,intercept))
+    plt.plot(feature, df_reg['fx'], color = 'red')
