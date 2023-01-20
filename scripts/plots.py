@@ -61,3 +61,23 @@ def show_correlation(label: pd.Series, feature: pd.Series):
     plt.ylabel(label.name)
     plt.title(label.name + ' vs ' + feature.name + ' - correlation:' + str(correlation) + '\nslope: {:.4f}\ny-intercept: {:.4f}'.format(slope,intercept))
     plt.plot(feature, df_reg['fx'], color = 'red')
+
+def show_correlation_heatmap(df: pd.DataFrame):
+    '''
+    This function accepts a dataset with numeric values and transforms it to a correlation matrix in form of a heatmap
+    '''
+    corr_matrix = round(df.corr(), 2)
+
+    fig, ax = plt.subplots(figsize=(9,6))
+
+    ax.imshow(corr_matrix)
+    ax.set_xticks(range(len(corr_matrix)), corr_matrix.columns)
+    ax.set_yticks(range(len(corr_matrix)), corr_matrix.index)
+
+    plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+         rotation_mode="anchor")
+
+    for i, ind in enumerate(corr_matrix.index):
+        for j, col in enumerate(corr_matrix.columns):
+            ax.text(j, i, corr_matrix.loc[ind, col],
+                        ha="center", va="center", color="w")
