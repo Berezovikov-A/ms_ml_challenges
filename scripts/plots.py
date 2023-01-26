@@ -19,7 +19,7 @@ def show_distribution(var_data: pd.Series):
 
     fig, ax = plt.subplots(2, 1, figsize = (15,6))
 
-    sns.histplot(var_data, binwidth = 15, kde=True, ax=ax[0])
+    sns.histplot(var_data, kde=True, ax=ax[0])
     ax[0].set_ylabel('Frequency')
 
     ax[0].axvline(x=min_val, color = 'gray', linestyle='dashed', linewidth = 2)
@@ -43,6 +43,24 @@ def show_box(var_data: pd.DataFrame):
     '''
     This function accepts a Pandas dataframe with a label and a feature and shows a box plot to show their relationship
     '''
-    fig = plt.figure(figsize=(10,6))
-    
-    fig = sns.boxplot(data = var_data, y = var_data.columns[0], x = var_data.columns[1])
+    fig, ax = plt.subplots(figsize=(10,6))
+    sns.boxplot(data = var_data, y = var_data.columns[0], x = var_data.columns[1], ax=ax)
+
+def show_corr_matrix(var_data: pd.DataFrame):
+    '''
+    This function accepts a Pandas dataframe and returns a correlation matris of its columns
+    '''
+
+    correlation_var = var_data.corr()
+
+    fig, ax = plt.subplots(figsize=(10,10))
+    sns.heatmap(correlation_var, annot=True, fmt='.1f', vmin=-1, vmax=1, center=0, square=True, cmap='rocket', ax=ax)
+
+def show_correlation(var_data: pd.DataFrame):
+    '''
+    this function accepts a Pandas dataframe 2 columns and plots a scatter plot to show the correlation
+    '''
+    col = var_data.columns
+
+    fig, ax = plt.subplots(figsize=(7,7))
+    sns.regplot(data=var_data, x=col[1], y=col[0], ax=ax)
