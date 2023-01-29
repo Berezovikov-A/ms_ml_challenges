@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 import pandas as pd
 from scipy import stats
+from sklearn.metrics import confusion_matrix
 
 
 def show_distribution(var_data: pd.Series):
@@ -64,3 +65,17 @@ def show_correlation(var_data: pd.DataFrame):
 
     fig, ax = plt.subplots(figsize=(7,7))
     sns.regplot(data=var_data, x=col[1], y=col[0], ax=ax)
+
+def show_confusion_matrix(y_test: np.ndarray, predictions: np.ndarray, label_names: list = []):
+    
+    cm = confusion_matrix(y_test, predictions)
+
+    sns.set(font_scale=1.3)
+    fig, ax = plt.subplots(figsize=(6,6))
+    sns.heatmap(cm, annot=True, square=True, cmap='crest', ax=ax)
+    if label_names:
+        ax.set_xticklabels(label_names, rotation=90)
+        ax.set_yticklabels(label_names, rotation=360)
+
+    ax.set_ylabel('Actual labels')
+    ax.set_xlabel('Predicted labels')
